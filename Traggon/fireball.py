@@ -5,7 +5,7 @@ class Fireball:
     def __init__(self, x, y, target_x, target_y):
         self.rect = pygame.Rect(x, y, 30, 30)
         self.color = (255, 0, 0)  # Red
-        self.speed = 8
+        self.speed = 10
         self.active = True
         self.returned = False
         self.collision_cooldown = 0  # Add collision cooldown
@@ -22,16 +22,6 @@ class Fireball:
         else:
             self.vel_x = 0
             self.vel_y = -self.speed  # Default upward if clicked on player
-        
-        # Check if angle is within allowed range (-165 to -15 degrees)
-        angle = math.atan2(self.vel_y, self.vel_x)
-        min_angle = math.radians(-165)  # -165 degrees
-        max_angle = math.radians(-15)   # -15 degrees
-        
-        # If outside allowed range, shoot straight up
-        if angle < min_angle or angle > max_angle:
-            self.vel_x = 0
-            self.vel_y = -self.speed  # Straight up
         
     def update(self):
         if self.active:
