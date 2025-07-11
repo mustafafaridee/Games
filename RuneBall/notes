@@ -1,0 +1,3 @@
+# UPDATE - Major bug fix
+
+# There's only one thing left for now before we move into the powerup update, and then the new tile types update. The collision bug. It's been there since the beginning. Randomy, the fireballs move through the tiles. This sometimes causes damage to them, and sometimes it doesn't. Please put lots of effort into this
