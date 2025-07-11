@@ -1,3 +1,6 @@
-# UPDATE - Major bug fix
+# Minor performance tweaks - SMALL UPDATE
 
-# There's only one thing left for now before we move into the powerup update, and then the new tile types update. The collision bug. It's been there since the beginning. Randomy, the fireballs move through the tiles. This sometimes causes damage to them, and sometimes it doesn't. Please put lots of effort into this
+# The fireballs need to be returned to original speed and spawn delay
+# The aiming system right now is unsatisfactory. The fireballs travel in the general direction of the mouse, but not precisely enough.
+# Regular fireballs will be buffed and will now do 2 damage each, rather than 1.
+# Tile spawn rate will be increased to 37.5% again but as for the difficulty factor, in the line 'min_health = max(1, int(0.75 * round_number))', the 0.75 will be changed to 0.6.

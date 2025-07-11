@@ -2,7 +2,7 @@ import pygame
 import random
 
 class Tile:
-    def __init__(self, x, y, width=95, height=70, health=1):  # Increased height from 60 to 70
+    def __init__(self, x, y, width=95, height=70, health=1):
         self.rect = pygame.Rect(x, y, width, height)
         self.active = True
         self.health = health
@@ -19,7 +19,7 @@ class Tile:
             text_rect = health_text.get_rect(center=self.rect.center)
             screen.blit(health_text, text_rect)
     
-    def take_damage(self, damage=1):
+    def take_damage(self, damage=2):  # Increased from 1 to 2 damage per hit
         self.health -= damage
         if self.health <= 0:
             self.destroy()
@@ -31,7 +31,7 @@ def create_tiles_grid(round_number, existing_tiles=[]):
     """
     Create tiles in a 6-column grid with 10px gaps between tiles and 15px edge gaps.
     9 rows total before reaching player zone.
-    Only spawn in back 2 rows (rows 0-1) with 25% chance per empty slot.
+    Only spawn in back 2 rows (rows 0-1) with 37.5% chance per empty slot.
     """
     tiles = []
     
@@ -42,20 +42,15 @@ def create_tiles_grid(round_number, existing_tiles=[]):
     EDGE_GAP = 15
     SCREEN_WIDTH = 640
     
-    # Calculate tile height for 9 rows to fit before player zone (750px available)
-    # 750 = 9 * tile_height + 8 * gap_between_tiles + top_margin
-    # 750 = 9 * tile_height + 8 * 10 + 10
-    # 750 = 9 * tile_height + 90
-    # tile_height = (750 - 90) / 9 = 73.33 -> round to 70 for better spacing
     TILE_WIDTH = 95
-    TILE_HEIGHT = 70  # Increased from 60
+    TILE_HEIGHT = 70
     
     # Calculate starting position with larger edge gap
     start_x = EDGE_GAP
     start_y = 10  # Top margin
     
-    # Calculate health range
-    min_health = max(1, int(0.75 * round_number))
+    # Calculate health range - UPDATED difficulty scaling
+    min_health = max(1, int(0.6 * round_number))  # Changed from 0.75 to 0.6
     max_health = max(1, round_number)
     
     # Only spawn in back 2 rows (rows 0 and 1)
@@ -71,8 +66,8 @@ def create_tiles_grid(round_number, existing_tiles=[]):
                     position_occupied = True
                     break
             
-            # 25% chance to spawn if position is free
-            if not position_occupied and random.random() < 0.25:
+            # 37.5% chance to spawn if position is free (back to 37.5%)
+            if not position_occupied and random.random() < 0.375:
                 health = random.randint(min_health, max_health)
                 tiles.append(Tile(x, y, TILE_WIDTH, TILE_HEIGHT, health=health))
     
@@ -81,14 +76,14 @@ def create_tiles_grid(round_number, existing_tiles=[]):
 def move_tiles_down(tiles):
     """Move all tiles down by one row (80px = 70px tile + 10px gap)"""
     for tile in tiles:
-        tile.rect.y += 80  # Updated from 70 to 80
+        tile.rect.y += 80
 
 def get_grid_position(x, y):
     """Convert pixel coordinates to grid coordinates"""
     GAP_BETWEEN_TILES = 10
     EDGE_GAP = 15
     TILE_WIDTH = 95
-    TILE_HEIGHT = 70  # Updated
+    TILE_HEIGHT = 70
     
     start_x = EDGE_GAP
     start_y = 10

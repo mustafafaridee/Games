@@ -98,7 +98,7 @@ def main():
     can_shoot = True
     
     pending_fireballs = []
-    spawn_delay = 30
+    spawn_delay = 10  # Decreased from 30 to original faster spawn delay
     
     fireball_timer = 0
     EMERGENCY_SKIP_TIME = 300
@@ -180,32 +180,16 @@ def main():
                 all_objects = tiles + powerups
                 collided_objects = []
                 
-                # DEBUG: Track what we're checking
-                potential_hits = []
-                
                 for obj in all_objects:
-                    if obj.active:
-                        was_filtered = fireball.has_hit_object(obj)
+                    if obj.active and not fireball.has_hit_object(obj):
                         rect_collision = fireball.rect.colliderect(obj.rect)
                         line_collision = line_rect_intersection(line[0], line[1], line[2], line[3], obj.rect)
                         
-                        # DEBUG: Log every potential collision
                         if rect_collision or line_collision:
-                            obj_type = "TILE" if isinstance(obj, Tile) else "POWERUP"
-                            potential_hits.append(f"{obj_type}@({obj.rect.x},{obj.rect.y}) filtered={was_filtered}")
-                        
-                        if not was_filtered and (rect_collision or line_collision):
                             dx = fireball.rect.centerx - obj.rect.centerx
                             dy = fireball.rect.centery - obj.rect.centery
                             distance = math.sqrt(dx*dx + dy*dy)
                             collided_objects.append((obj, distance))
-                
-                # DEBUG: Print when we have potential hits but no actual collisions
-                if potential_hits and not collided_objects:
-                    print(f"GHOST BUG: Fireball {fireball_id} at ({fireball.rect.x},{fireball.rect.y}) detected {len(potential_hits)} potential hits but all were filtered:")
-                    for hit in potential_hits:
-                        print(f"  {hit}")
-                    print(f"  Last hit object ID: {fireball.last_hit_object_id}")
                 
                 if collided_objects:
                     collided_objects.sort(key=lambda x: x[1])
@@ -220,7 +204,7 @@ def main():
                     
                     elif isinstance(closest_object, Tile):
                         tile = closest_object
-                        tile.take_damage(1)
+                        tile.take_damage(2)  # Fireballs now do 2 damage
                         
                         overlap_left = fireball.rect.right - tile.rect.left
                         overlap_right = tile.rect.right - fireball.rect.left

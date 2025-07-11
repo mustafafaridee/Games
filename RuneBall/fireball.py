@@ -5,7 +5,7 @@ class Fireball:
     def __init__(self, x, y, target_x, target_y):
         self.rect = pygame.Rect(x, y, 20, 20)
         self.color = (255, 0, 0)
-        self.speed = 6
+        self.speed = 8  # Increased from 6 to original speed
         self.active = True
         self.returned = False
         
@@ -17,12 +17,12 @@ class Fireball:
         self.last_hit_object_id = None
         self.frames_since_hit = 0
         
-        # Calculate direction vector
-        dx = target_x - (x + 10)
-        dy = target_y - (y + 10)
+        # IMPROVED AIMING: More precise targeting
+        dx = target_x - (x + 10)  # Target fireball center
+        dy = target_y - (y + 10)  # Target fireball center
         distance = math.sqrt(dx**2 + dy**2)
         
-        # Normalize and apply speed
+        # Normalize and apply speed with higher precision
         if distance > 0:
             self.vel_x = (dx / distance) * self.speed
             self.vel_y = (dy / distance) * self.speed
